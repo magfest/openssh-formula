@@ -97,7 +97,7 @@ properties:
       Specifies whether the password provided by the user for
       PasswordAuthentication will be validated through the Kerberos
       KDC.  To use this option, the server needs a Kerberos servtab
-      which allows the verification of the KDC's identity. The default
+      which allows the verification of the KDC`s identity. The default
       is False ("no").
     type: boolean
   syslog_facility:
@@ -156,7 +156,7 @@ properties:
       Specifies the available MAC (message authentication code)
       algorithms.  The MAC algorithm is used for data integrity
       protection.  Multiple algorithms must be comma-separated.  If the
-      specified value begins with a '+' character, then the specified
+      specified value begins with a "+" character, then the specified
       algorithms will be appended to the default set instead of
       replacing them.
       .
@@ -264,8 +264,8 @@ properties:
       Protocol
       --------
       Specifies the protocol versions sshd(8) supports.  The possible
-      values are '1' and '2'.  Multiple versions must be comma-
-      separated.  The default is '2'.  Protocol 1 suffers from a number
+      values are "1" and "2".  Multiple versions must be comma-
+      separated.  The default is "2".  Protocol 1 suffers from a number
       of cryptographic weaknesses and should not be used.  It is only
       offered to support legacy devices.
       .
@@ -365,6 +365,60 @@ properties:
       Specifies whether sshd should look up the remote host name, and to
       check that the resolved host name for the remote IP address maps back to the very same IP address
     type: boolean
+  challenge_response_auth:
+    description: |
+      ChallengeResponseAuthentication controls support for the 'keyboard-interactive' authentication scheme defined in RFC-4256.
+      The 'keyboard-interactive' authentication scheme could, in theory, ask a user any number of multi-facited questions.
+      It's using for duo 2FA authorization.
+    type: boolean
+  ciphers:
+    description: |
+      Symmetric algorithms for encrypting the bulk of transferred data are configured using the Ciphers option.
+      A good value is aes128-ctr,aes192-ctr,aes256-ctr. This should also provide good interoperability.
+    type: object
+    properties:
+      enabled:
+        description: |
+          Enables / disabled specific algorithm.
+        type: boolean
+  authentication_methods:
+    description: |
+      AuthenticationMethods
+      ---------------------
+      Specifies the authentication methods that must be successfully
+      completed for a user to be granted access. This option must be
+      followed by one or more comma-separated lists of authentication
+      method names, or by the single string any to indicate the default
+      behaviour of accepting any single authentication method. If the
+      default is overridden, then successful authentication requires
+      completion of every method in at least one of these lists.
+    type: object
+    properties:
+      enabled:
+        description: |
+          Enables / disabled specific method.
+        type: boolean
+  match_user:
+    description: |
+      Match User can be used to select individual users to alter the PasswordAuthentication directive for.
+      It's usefull for disabling 2FA for specific users.
+    type: object
+    properties:
+      user:
+        description: |
+          List of openssh user's, to be configured.
+          Example 'Match User root,foo,bar'
+        type: object
+        properties:
+          authentication_methods:
+            description: |
+              AuthenticationMethods (see description above) for specific user
+            type: object
+            properties:
+              enabled:
+                description: |
+                  Enables / disabled specific method.
+                type: boolean
 
 
 definitions:
